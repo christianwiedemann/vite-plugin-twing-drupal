@@ -42,7 +42,7 @@ jobs:
     needs: main
     runs-on: ubuntu-latest
     if:
-      ${{ github.repository == 'larowlan/vite-plugin-twing-drupal' &&
+      ${{ github.repository == 'christianwiedemann/vite-plugin-twing-drupal' &&
       contains('refs/heads/main',github.ref) && github.event_name == 'push' }}
     steps:
       - name: 🛑 Cancel Previous Runs
