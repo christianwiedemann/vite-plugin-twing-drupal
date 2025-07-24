@@ -11,7 +11,7 @@ exports[`Basic smoke test > Should cast default attributes to attributes 1`] = `
   <h1>Embed</h1>
   <article>
         Lorem ipsum dolor sit amet.
-    <button class=\\"button--primary\\">Nested include</button>
+    <button class="button--primary">Nested include</button>
           IT WORKS!
         </article>
 </section>
@@ -37,7 +37,7 @@ exports[`Basic smoke test > Should cast default attributes to attributes 1`] = `
 <p>🏆️ winning</p>
 <div>atom badge from nested dir 🙌</div>
 <button>nested button 🙌</button>
-<div  class=\\"ponies\\">hey there</div>
+<div  class="ponies">hey there</div>
   All received
     pony town"
 `;
@@ -58,7 +58,7 @@ exports[`Basic smoke test > Should support default attributes as a map 1`] = `
   <h1>Embed</h1>
   <article>
         Lorem ipsum dolor sit amet.
-    <button class=\\"button--primary\\">Nested include</button>
+    <button class="button--primary">Nested include</button>
           IT WORKS!
         </article>
 </section>
@@ -84,7 +84,7 @@ exports[`Basic smoke test > Should support default attributes as a map 1`] = `
 <p>🏆️ winning</p>
 <div>atom badge from nested dir 🙌</div>
 <button>nested button 🙌</button>
-<div  class=\\"ponies\\">hey there</div>
+<div  class="ponies">hey there</div>
   All received
     pony town"
 `;
@@ -100,7 +100,7 @@ exports[`Basic smoke test > Should support global context and functions 1`] = `
   <h1>Embed</h1>
   <article>
         Lorem ipsum dolor sit amet.
-    <button class=\\"button--primary\\">Nested include</button>
+    <button class="button--primary">Nested include</button>
           IT WORKS!
         </article>
 </section>
@@ -142,7 +142,7 @@ exports[`Basic smoke test > Should support includes 1`] = `
   <h1>Embed</h1>
   <article>
     Lorem ipsum dolor sit amet.
-    <button class=\\"button--primary\\">Nested include</button>
+    <button class="button--primary">Nested include</button>
           IT WORKS!
   </article>
 </section>
@@ -175,12 +175,12 @@ exports[`Basic smoke test > Should support includes 1`] = `
 
 exports[`Basic smoke test > Should support macros 1`] = `
 "<ul>
-      <li><a href=\\"/home\\">Home</a>
+      <li><a href="/home">Home</a>
       </li>
 
-      <li><a href=\\"/about\\">About</a>
+      <li><a href="/about">About</a>
           <ul>
-                      <li><a href=\\"/contact\\">Contact</a>
+                      <li><a href="/contact">Contact</a>
       </li>
 
               </ul>
@@ -201,7 +201,7 @@ exports[`Basic smoke test > Should support nested SDC 1`] = `
   <h1>Embed</h1>
   <article>
     Lorem ipsum dolor sit amet.
-    <button class=\\"button--primary\\">Nested include</button>
+    <button class="button--primary">Nested include</button>
           IT WORKS!
   </article>
 </section>
@@ -243,7 +243,7 @@ exports[`Basic smoke test > Should support variables 1`] = `
   <h1>Embed</h1>
   <article>
     Lorem ipsum dolor sit amet.
-    <button class=\\"button--primary\\">Nested include</button>
+    <button class="button--primary">Nested include</button>
           IT WORKS!
     </article>
 </section>
