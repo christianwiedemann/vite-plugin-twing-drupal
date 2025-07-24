@@ -1,0 +1,44 @@
+{
+  "name": "vite-plugin-twig-drupal",
+  "version": "1.0.0",
+  "description": "Provides a ⚡️ Vite plugin to transform 🌱 Twig into HTML with a 💧 Drupal flavour",
+  "keywords": [
+    "Vite",
+    "Vite plugin",
+    "Twig",
+    "Storybook",
+    "Drupal"
+  ],
+  "author": "larowlan <23667-larowlan@users.noreply.drupalcode.org>",
+  "license": "GPL-2.0-or-later",
+  "main": "./src/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "rm -rf dist && vite build --mode development",
+    "format": "prettier --write \"{test,src}/**/*.js\"",
+    "lint": "prettier --check \"{test,src}/**/*.js\"",
+    "test": "vitest run",
+    "test:debug": "node --inspect-brk node_modules/.bin/vitest run",
+
+    "pretest": "npm run-script build",
+    "semantic-release": "semantic-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/larowlan/vite-plugin-twig-drupal.git"
+  },
+  "dependencies": {
+    "twing": "7.1.0",
+    "drupal-attribute": "^1.0.2",
+    "vite-plugin-node-polyfills": "^0.23.0"
+  },
+  "peerDependencies": {
+    "vite": "^4.4.11 || ^5 || ^6"
+  },
+  "devDependencies": {
+    "prettier": "^3.0.3",
+    "semantic-release": "^22.0.5",
+    "vite": "^4.4.11 || ^ 5",
+    "vitest": "^0.34.6"
+  }
+}

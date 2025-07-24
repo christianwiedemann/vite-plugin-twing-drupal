@@ -1,0 +1,30 @@
+{% include "@tests/section.twig" with {title: 'Include'} %}
+{%- embed "@tests/section.twig" with {title: 'Embed'} -%}
+{%- block content -%}
+    Lorem ipsum dolor sit amet.
+    {% include "@tests/button.twig" with {text: 'Nested include'} %}
+{% if active_theme is empty %}
+          {{ testFunction() }}
+{% endif %}
+{% endblock %}
+{% endembed %}
+{% include "@tests/section.twig" %}
+{% include "@tests/section.twig" with {title: 'Relative include'} %}
+{% embed 'jabba:card' with {
+    title: 'SDC',
+    teaser: 'Card',
+} %}
+{% endembed %}
+{% embed 'jabba:button' with {
+    title: 'SDC',
+} %}
+{% endembed %}
+{% include 'jabba:button' with {
+    title: 'included button 👈️',
+} %}
+{% include 'jabba:card' with {
+    title: 'Include card',
+    teaser: '🏆️ winning',
+} %}
+<div {{ attributes }}>hey there</div>
+{% include "extender.twig" %}
