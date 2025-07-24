@@ -67,7 +67,7 @@ jobs:
       - name: 🚀 Release
         uses: cycjimmy/semantic-release-action@v4
         with:
-          semantic_version: 22
+          semantic_version: 23
           branches: |
             [
               'main'
