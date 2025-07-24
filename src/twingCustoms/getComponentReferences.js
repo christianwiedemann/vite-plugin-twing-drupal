@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs"
+import path from "path"
 
 /**
  * Get all components that reference the given component files (reverse dependency search)
@@ -21,61 +21,61 @@ export default function getComponentReferences(
           if (filePath.startsWith(namespacePath)) {
             const relativePath = path
               .relative(namespacePath, filePath)
-              .replace(/\\/g, '/');
-            return `@${namespace}/${relativePath}`;
+              .replace(/\\/g, "/")
+            return `@${namespace}/${relativePath}`
           }
         }
       }
     }
 
     // If already namespaced, return as is
-    if (filePath.startsWith('@')) {
-      return filePath;
+    if (filePath.startsWith("@")) {
+      return filePath
     }
 
-    return filePath;
-  };
+    return filePath
+  }
 
   // Convert target files to their namespaced references
-  const targetReferences = targetComponentFiles.map(getNamespacedReference);
+  const targetReferences = targetComponentFiles.map(getNamespacedReference)
   console.log(
     `[getComponentReferences] Looking for references to: ${targetReferences.join(
-      ', '
+      ", "
     )}`
-  );
+  )
 
   // Function to walk through directory and collect all .twig files
   const walkDirectory = (dir, fileList = []) => {
     try {
-      const entries = fs.readdirSync(dir, { withFileTypes: true });
+      const entries = fs.readdirSync(dir, { withFileTypes: true })
       for (const entry of entries) {
-        const fullPath = path.join(dir, entry.name);
+        const fullPath = path.join(dir, entry.name)
         if (entry.isDirectory()) {
-          walkDirectory(fullPath, fileList);
-        } else if (entry.isFile() && entry.name.endsWith('.twig')) {
-          fileList.push(fullPath);
+          walkDirectory(fullPath, fileList)
+        } else if (entry.isFile() && entry.name.endsWith(".twig")) {
+          fileList.push(fullPath)
         }
       }
     } catch (err) {
-      console.warn(`Warning: Could not walk directory ${dir}: ${err.message}`);
+      console.warn(`Warning: Could not walk directory ${dir}: ${err.message}`)
     }
-    return fileList;
-  };
+    return fileList
+  }
 
   // Get all Twig files from all namespaces
   const getAllTwigFiles = () => {
-    const allFiles = [];
+    const allFiles = []
 
     Object.entries(namespaces).forEach(([namespace, paths]) => {
-      const namespacePaths = Array.isArray(paths) ? paths : [paths];
+      const namespacePaths = Array.isArray(paths) ? paths : [paths]
       namespacePaths.forEach((namespacePath) => {
-        const files = walkDirectory(namespacePath);
-        allFiles.push(...files);
-      });
-    });
+        const files = walkDirectory(namespacePath)
+        allFiles.push(...files)
+      })
+    })
 
-    return [...new Set(allFiles)]; // Remove duplicates
-  };
+    return [...new Set(allFiles)] // Remove duplicates
+  }
 
   // Extract references from Twig content
   const extractReferences = (content) => {
@@ -86,71 +86,71 @@ export default function getComponentReferences(
       /{%\s*embed\s+['"]([^'"]+)['"](\s+with\s+{[^}]*})?\s*%}/g,
       /{%\s*import\s+['"]([^'"]+)['"]\s*%}/g,
       /{%\s*from\s+['"]([^'"]+)['"]\s*%}/g,
-    ];
+    ]
 
     const refs = patterns.flatMap((pattern) => {
-      const matches = [];
-      let match;
+      const matches = []
+      let match
       while ((match = pattern.exec(content)) !== null) {
-        const ref = match[1];
+        const ref = match[1]
         // Convert mercury: format to @mercury format
-        if (ref.startsWith('mercury:')) {
-          const componentName = ref.replace('mercury:', '');
-          matches.push(`@mercury/${componentName}/${componentName}.twig`);
+        if (ref.startsWith("mercury:")) {
+          const componentName = ref.replace("mercury:", "")
+          matches.push(`@mercury/${componentName}/${componentName}.twig`)
         } else {
-          matches.push(ref);
+          matches.push(ref)
         }
       }
-      return matches;
-    });
-    return refs;
-  };
+      return matches
+    })
+    return refs
+  }
 
   // Find files that reference our target components
   const findReferencingFiles = () => {
-    const allTwigFiles = getAllTwigFiles();
-    const referencingFiles = [];
+    const allTwigFiles = getAllTwigFiles()
+    const referencingFiles = []
 
     console.log(
       `[getComponentReferences] Scanning ${allTwigFiles.length} Twig files`
-    );
+    )
 
     allTwigFiles.forEach((filePath) => {
       try {
-        const content = fs.readFileSync(filePath, 'utf8');
-        const references = extractReferences(content);
+        const content = fs.readFileSync(filePath, "utf8")
+        const references = extractReferences(content)
 
         // Check if any of the references match our target components
         const hasTargetReference = references.some((ref) =>
           targetReferences.includes(ref)
-        );
+        )
 
         if (hasTargetReference) {
           // Convert absolute path back to namespaced reference for consistency
-          const namespacedPath = getNamespacedReference(filePath);
+          const namespacedPath = getNamespacedReference(filePath)
           referencingFiles.push({
             file: filePath,
             namespacedPath,
             references: references.filter((ref) =>
               targetReferences.includes(ref)
             ),
-          });
+          })
         }
       } catch (error) {
         console.warn(
           `Warning: Could not process file ${filePath}: ${error.message}`
-        );
+        )
       }
-    });
+    })
 
-    return referencingFiles;
-  };
+    return referencingFiles
+  }
 
-  const results = findReferencingFiles();
+  const results = findReferencingFiles()
   console.log(
     `[getComponentReferences] Found ${results.length} files referencing target components`
-  );
+  )
 
   // Return just the file paths (or you could return the full objects with more info)
-  return results.map((result) => result.file);
+  return results.map((result) => result.file)
 }

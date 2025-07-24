@@ -28,7 +28,7 @@
     "url": "https://github.com/larowlan/vite-plugin-twig-drupal.git"
   },
   "dependencies": {
-    "twing": "7.1.0",
+    "twing": "^7.1.0",
     "drupal-attribute": "^1.0.2",
     "vite-plugin-node-polyfills": "^0.23.0"
   },
