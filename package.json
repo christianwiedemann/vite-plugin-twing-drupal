@@ -19,7 +19,6 @@
     "lint": "prettier --check \"{test,src}/**/*.js\"",
     "test": "vitest run",
     "test:debug": "node --inspect-brk node_modules/.bin/vitest run",
-
     "pretest": "npm run-script build",
     "semantic-release": "semantic-release"
   },
@@ -28,9 +27,9 @@
     "url": "https://github.com/christianwiedemann/vite-plugin-twing-drupal.git"
   },
   "dependencies": {
-    "lodash": "^4.17.21",
-    "twing": "^7.1.0",
     "drupal-attribute": "^1.0.2",
+    "lodash.clonedeep": "^4.5.0",
+    "twing": "^7.1.0",
     "vite-plugin-node-polyfills": "^0.23.0"
   },
   "peerDependencies": {
