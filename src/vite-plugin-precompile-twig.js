@@ -370,10 +370,7 @@ function generateModuleContent(
   return `
     import { createEnvironment } from 'twing';
 
-    import { addDrupalExtensions } from '/${relative(
-      cwd,
-      resolve(__dirname, "./lib/twing.js")
-    )}';
+    import { addDrupalExtensions } from '@christianwiedemann/drupal-twig-extensions/twing';
     
     import createSDCLoader from '/${relative(
       cwd,

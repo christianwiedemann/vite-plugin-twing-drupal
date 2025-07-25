@@ -28,9 +28,11 @@
   },
   "dependencies": {
     "drupal-attribute": "^1.0.2",
+    "locutus": "^2.0.32",
     "lodash.clonedeep": "^4.5.0",
     "twing": "^7.1.0",
-    "vite-plugin-node-polyfills": "^0.23.0"
+    "vite-plugin-node-polyfills": "^0.23.0",
+    "@christianwiedemann/drupal-twig-extensions": "^2.0.0-beta.1"
   },
   "peerDependencies": {
     "vite": "^4.4.11 || ^5 || ^6"
