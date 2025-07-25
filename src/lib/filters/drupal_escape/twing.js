@@ -1,5 +1,5 @@
 export function escape(escapedValue) {
-  return escapedValue;
+  return escapedValue
 }
 
 import { newTwingFilter } from "../../helpers/twing.js"
