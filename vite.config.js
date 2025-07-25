@@ -26,9 +26,7 @@ export default defineConfig({
         tests: ['tests/fixtures']
       }
     }),
-    precompileTwig(),
   ],
-
   resolve: {
     preserveSymlinks: true,
   },

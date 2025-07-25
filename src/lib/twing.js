@@ -1,0 +1,29 @@
+import filters from './filters/twing.js';
+import functions from './functions/twing.js';
+import filtersConfigInit from './filters/configInit.js';
+import functionsConfigInit from './functions/configInit.js';
+import state from './config.js';
+
+/**
+ * Adds all the extensions to the given Twing environment.
+ *
+ * @param {TwingEnvironment} twingEnvironment
+ *   The Twing environment to modify.
+ * @param {Object<string, ?string|Object<string, ?string>>} config
+ *   The Drupal config to use.
+ */
+export function addDrupalExtensions(twingEnvironment, config = {}) {
+  filters.forEach((twingFilter) => {
+    twingEnvironment.addFilter(twingFilter);
+  });
+
+  functions.forEach((twingFunction) => {
+    twingEnvironment.addFunction(twingFunction);
+  });
+
+  [...filtersConfigInit, ...functionsConfigInit].forEach((configInit) => {
+    configInit(state, config);
+  });
+}
+
+export { default as Attribute } from './Attribute.js';

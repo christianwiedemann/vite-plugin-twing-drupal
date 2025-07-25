@@ -2,7 +2,9 @@
 import { readdirSync, readFileSync, existsSync } from "fs"
 import { resolve, relative, dirname, join } from "path"
 import { fileURLToPath } from "url"
-import getComponentReferences from "./twingCustoms/getComponentReferences"
+import getComponentReferences from "./loader/getComponentReferences.js"
+
+
 
 // Get current file directory.
 const __filename = fileURLToPath(import.meta.url)
@@ -358,20 +360,18 @@ function generateModuleContent(key, templateSources, resolvedNamespaces, cwd) {
     .join(",\n    ")
 
   return `
-    import { createArrayLoader, createEnvironment } from 'twing';
+    import { createEnvironment } from 'twing';
+
+    import { addDrupalExtensions } from '/${relative(
+        cwd,
+        resolve(__dirname, "./lib/twing.js")
+      )}';
     import createSDCLoader from '/${relative(
       cwd,
-      resolve(__dirname, "./twingCustoms/createSDCLoader.js")
-    )}';
-    import functions from '/${relative(
-      cwd,
-      resolve(__dirname, "./twingCustoms/functions.js")
-    )}';
-    import filters from '/${relative(
-      cwd,
-      resolve(__dirname, "./twingCustoms/filters.js")
+      resolve(__dirname, "./loader/createSDCLoader.js")
     )}';
     
+  
     // Include all templates, including namespaced ones.
     const allSources = {
       ${allSourcesString}
@@ -384,15 +384,8 @@ function generateModuleContent(key, templateSources, resolvedNamespaces, cwd) {
     // Create a loader and environment.
     const loader = createSDCLoader(allSources, twingNamespaces);
     const env = createEnvironment(loader);
+    addDrupalExtensions(env);
     
-    // Add functions and filters directly.
-    for (const func of functions) {
-      env.addFunction(func);
-    }
-    
-    for (const filter of filters) {
-      env.addFilter(filter);
-    }
     
     /**
      * Renders the preloaded Twig template.
