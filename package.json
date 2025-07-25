@@ -28,6 +28,7 @@
     "url": "https://github.com/christianwiedemann/vite-plugin-twing-drupal.git"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "twing": "^7.1.0",
     "drupal-attribute": "^1.0.2",
     "vite-plugin-node-polyfills": "^0.23.0"
