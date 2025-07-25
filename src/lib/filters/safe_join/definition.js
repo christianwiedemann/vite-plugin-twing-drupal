@@ -30,11 +30,11 @@
  * ```
  */
 
-export const name = 'safe_join';
+export const name = "safe_join"
 
 export const options = {
   needs_environment: true,
-  is_safe: ['html'],
-};
+  is_safe: ["html"],
+}
 
-export const acceptedArguments = [{ name: 'glue', defaultValue: '' }];
+export const acceptedArguments = [{ name: "glue", defaultValue: "" }]

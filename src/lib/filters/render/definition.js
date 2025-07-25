@@ -8,11 +8,11 @@
  * ```
  */
 
-export const name = 'render';
+export const name = "render"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Wrapper around render() for twig printed output.
@@ -37,43 +37,43 @@ export const acceptedArguments = [];
  */
 export function renderVar(arg) {
   const typeofArg =
-    arg === null ? 'null' : Array.isArray(arg) ? 'array' : typeof arg;
+    arg === null ? "null" : Array.isArray(arg) ? "array" : typeof arg
 
   // Return early for NULL, empty arrays, empty strings and FALSE booleans.
   // @todo https://www.drupal.org/project/drupal/issues/3240093 Determine if
   //   this behavior is correct or should be deprecated.
   if (
-    typeofArg === 'null' ||
+    typeofArg === "null" ||
     // We should treat JavaScript's undefined like PHP's null.
-    typeofArg === 'undefined' ||
+    typeofArg === "undefined" ||
     // A PHP array is more like a JavaScript object, so we check for an empty
     // Array or Object.
-    (typeofArg === 'array' && arg.length === 0) ||
-    (typeofArg === 'object' && Object.keys(arg).length === 0) ||
-    arg === '' ||
+    (typeofArg === "array" && arg.length === 0) ||
+    (typeofArg === "object" && Object.keys(arg).length === 0) ||
+    arg === "" ||
     arg === false
   ) {
-    return '';
+    return ""
   }
 
   // In PHP, Booleans cast to a string as "1" or "0". We handle Boolean false
   // above.
   if (arg === true) {
-    return '1';
+    return "1"
   }
 
   // Optimize for scalars as it is likely they come from the escape filter.
   if (
-    typeofArg === 'number' ||
-    typeofArg === 'bigint' ||
-    typeofArg === 'string'
+    typeofArg === "number" ||
+    typeofArg === "bigint" ||
+    typeofArg === "string"
   ) {
-    return arg;
+    return arg
   }
 
   // A Symbol cannot be cast to a string. We return the Symbol's description.
-  if (typeofArg === 'symbol') {
-    return arg.description;
+  if (typeofArg === "symbol") {
+    return arg.description
   }
 
   // JavaScript will cast an array to a string of the values joined with a
@@ -81,8 +81,8 @@ export function renderVar(arg) {
   // throw errors saying `"0" is an invalid render array key` and print an empty
   // string for that variable. Until we implement a renderer, we should return
   // an empty string.
-  if (typeofArg === 'array') {
-    return '';
+  if (typeofArg === "array") {
+    return ""
   }
 
   // We have tested `typeof arg` for 'null', 'undefined', 'boolean', 'number',
@@ -91,30 +91,30 @@ export function renderVar(arg) {
   // toString() method. See the full list of possible "typeof" values.
   // @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof
 
-  if (typeof arg['toRenderable'] === 'function') {
-    return arg.toRenderable();
-  } else if (typeof arg['__toString'] === 'function') {
-    return arg.__toString();
+  if (typeof arg["toRenderable"] === "function") {
+    return arg.toRenderable()
+  } else if (typeof arg["__toString"] === "function") {
+    return arg.__toString()
   }
 
   // Throw an error if given a function instead of a render array or scalar.
   // Note: neither Twig.js or Twing seem capable of sending a JS function as a
   // variable; Twig.js executes the function and sets the variable to the return
   // value of the function and Twing throws a TwingErrorRuntime.
-  if (typeofArg === 'function') {
-    throw new Error('A function cannot be printed.');
+  if (typeofArg === "function") {
+    throw new Error("A function cannot be printed.")
   }
 
   // This is a render array, with special simple cases already handled.
   // Early return if this element was pre-rendered (no need to re-render).
-  if (arg['#printed'] && arg['#markup']) {
-    return arg['#markup'];
+  if (arg["#printed"] && arg["#markup"]) {
+    return arg["#markup"]
   }
 
-  arg['#printed'] = false;
+  arg["#printed"] = false
 
   // Cast the Object to a string using its toString method.
-  return `${arg}`;
+  return `${arg}`
 
   // TODO: Add config for a render function.
   // const string = `${arg}`;

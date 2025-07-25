@@ -45,13 +45,13 @@
  * ```
  */
 
-export const name = 't';
+export const name = "t"
 
 export const options = {
-  is_safe: ['html'],
-};
+  is_safe: ["html"],
+}
 
 export const acceptedArguments = [
-  { name: 'args', defaultValue: {} },
-  { name: 'options', defaultValue: {} },
-];
+  { name: "args", defaultValue: {} },
+  { name: "options", defaultValue: {} },
+]

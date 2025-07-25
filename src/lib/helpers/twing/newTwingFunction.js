@@ -1,11 +1,6 @@
-import { createFunction } from 'twing';
+import { createFunction } from "twing"
 
 const newTwingFunction = (name, callable, options, acceptedArguments = []) =>
-  createFunction(
-    name,
-    callable,
-    acceptedArguments,
-    options,
-  );
+  createFunction(name, callable, acceptedArguments, options)
 
-export default newTwingFunction;
+export default newTwingFunction

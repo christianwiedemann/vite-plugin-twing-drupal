@@ -8,11 +8,11 @@
  * ```
  */
 
-export const name = 'testFunction';
+export const name = "testFunction"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Gets the name of the active theme.
@@ -24,5 +24,5 @@ export const acceptedArguments = [];
  *   The name of the active theme.
  */
 export function testFunction(config) {
-  return 'IT WORKS!';
+  return "IT WORKS!"
 }

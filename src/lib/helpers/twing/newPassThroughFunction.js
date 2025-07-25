@@ -1,17 +1,17 @@
-import newTwingFunction from './newTwingFunction.js';
+import newTwingFunction from "./newTwingFunction.js"
 
 const newPassThroughFunction = (
   functionName,
   options = {},
-  acceptedArguments = [],
+  acceptedArguments = []
 ) =>
   newTwingFunction(
     functionName,
     async function (value) {
-      return value;
+      return value
     },
     options,
-    acceptedArguments,
-  );
+    acceptedArguments
+  )
 
-export default newPassThroughFunction;
+export default newPassThroughFunction

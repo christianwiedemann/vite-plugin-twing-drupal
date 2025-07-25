@@ -4,8 +4,6 @@ import { resolve, relative, dirname, join } from "path"
 import { fileURLToPath } from "url"
 import getComponentReferences from "./loader/getComponentReferences.js"
 
-
-
 // Get current file directory.
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -363,9 +361,9 @@ function generateModuleContent(key, templateSources, resolvedNamespaces, cwd) {
     import { createEnvironment } from 'twing';
 
     import { addDrupalExtensions } from '/${relative(
-        cwd,
-        resolve(__dirname, "./lib/twing.js")
-      )}';
+      cwd,
+      resolve(__dirname, "./lib/twing.js")
+    )}';
     import createSDCLoader from '/${relative(
       cwd,
       resolve(__dirname, "./loader/createSDCLoader.js")

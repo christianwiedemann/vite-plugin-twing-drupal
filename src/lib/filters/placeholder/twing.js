@@ -1,15 +1,15 @@
-import { newTwingFilter } from '../../helpers/twing.js';
-import { callable as escape } from '../drupal_escape/twing.js';
+import { newTwingFilter } from "../../helpers/twing.js"
+import { callable as escape } from "../drupal_escape/twing.js"
 import {
   name,
   options,
   acceptedArguments,
   wrapPlaceholder,
-} from './definition.js';
+} from "./definition.js"
 
 export async function callable(template, value) {
-  const escapedValue = await escape(template, value, 'html', null, true);
-  return wrapPlaceholder(escapedValue);
+  const escapedValue = await escape(template, value, "html", null, true)
+  return wrapPlaceholder(escapedValue)
 }
 
-export default newTwingFilter(name, callable, options, acceptedArguments);
+export default newTwingFilter(name, callable, options, acceptedArguments)

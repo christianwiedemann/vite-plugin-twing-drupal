@@ -8,13 +8,13 @@
  * ```
  */
 
-import Attribute from '../../Attribute.js';
+import Attribute from "../../Attribute.js"
 
-export const name = 'create_attribute';
+export const name = "create_attribute"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [{ name: 'attributes', defaultValue: {} }];
+export const acceptedArguments = [{ name: "attributes", defaultValue: {} }]
 
 /**
  * Creates an Attribute object.
@@ -27,26 +27,26 @@ export const acceptedArguments = [{ name: 'attributes', defaultValue: {} }];
  *   An attributes object that has the given attributes.
  */
 export function createAttribute(attributes = {}) {
-  let attributeObject;
+  let attributeObject
 
   // @TODO: https://github.com/JohnAlbin/drupal-twig-extensions/issues/1
   if (attributes instanceof Map || Array.isArray(attributes)) {
-    attributeObject = new Attribute(attributes);
+    attributeObject = new Attribute(attributes)
   } else {
-    attributeObject = new Attribute();
+    attributeObject = new Attribute()
 
     // Loop through all the given attributes, if any.
     if (attributes) {
       Object.keys(attributes).forEach((key) => {
         // Ensure class is always an array.
-        if (key === 'class' && !Array.isArray(attributes[key])) {
-          attributeObject.setAttribute(key, [attributes[key]]);
+        if (key === "class" && !Array.isArray(attributes[key])) {
+          attributeObject.setAttribute(key, [attributes[key]])
         } else {
-          attributeObject.setAttribute(key, attributes[key]);
+          attributeObject.setAttribute(key, attributes[key])
         }
-      });
+      })
     }
   }
 
-  return attributeObject;
+  return attributeObject
 }

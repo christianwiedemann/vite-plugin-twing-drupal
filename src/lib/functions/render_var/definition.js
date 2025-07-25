@@ -8,10 +8,10 @@
  * ```
  */
 
-export const name = 'render_var';
+export const name = "render_var"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [{ name: 'arg' }];
+export const acceptedArguments = [{ name: "arg" }]
 
-export { renderVar } from '../../filters/render/definition.js';
+export { renderVar } from "../../filters/render/definition.js"

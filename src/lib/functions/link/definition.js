@@ -8,17 +8,17 @@
  * ```
  */
 
-import { createAttribute } from '../create_attribute/definition.js';
+import { createAttribute } from "../create_attribute/definition.js"
 
-export const name = 'link';
+export const name = "link"
 
-export const options = {};
+export const options = {}
 
 export const acceptedArguments = [
-  { name: 'text' },
-  { name: 'url' },
-  { name: 'attributes', defaultValue: {} },
-];
+  { name: "text" },
+  { name: "url" },
+  { name: "attributes", defaultValue: {} },
+]
 
 /**
  * Gets a rendered link from a url object.
@@ -34,5 +34,5 @@ export const acceptedArguments = [
  *   A link to the given URL.
  */
 export function link(text, url, attributes = {}) {
-  return `<a href="${url}"${createAttribute(attributes)}>${text}</a>`;
+  return `<a href="${url}"${createAttribute(attributes)}>${text}</a>`
 }

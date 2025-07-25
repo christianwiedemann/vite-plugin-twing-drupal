@@ -8,11 +8,11 @@
  * ```
  */
 
-export const name = 'clean_class';
+export const name = "clean_class"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Prepares a string for use as a valid class name.
@@ -32,17 +32,17 @@ export const acceptedArguments = [];
  * @see \Drupal\Component\Utility\Html::getClass()
  */
 export function cleanClass(config, string) {
-  const identifier = String(string);
+  const identifier = String(string)
 
   if (
     !Object.prototype.hasOwnProperty.call(config.cleanClassCache, identifier)
   ) {
     config.cleanClassCache[identifier] = cleanCssIdentifier(
-      identifier.toLowerCase(),
-    );
+      identifier.toLowerCase()
+    )
   }
 
-  return config.cleanClassCache[identifier];
+  return config.cleanClassCache[identifier]
 }
 
 /**
@@ -64,43 +64,43 @@ export function cleanClass(config, string) {
  * @see \Drupal\Component\Utility\Html::cleanCssIdentifier()
  */
 function cleanCssIdentifier(identifier, filter) {
-  if (typeof filter === 'undefined') {
+  if (typeof filter === "undefined") {
     filter = {
-      ' ': '-',
-      _: '-',
-      '/': '-',
-      '[': '-',
-      ']': '',
-    };
+      " ": "-",
+      _: "-",
+      "/": "-",
+      "[": "-",
+      "]": "",
+    }
   }
 
   // In order to keep '__' to stay '__' we first replace it with a different
   // placeholder after checking that it is not defined as a filter.
-  let doubleUnderscoreReplacements = 0;
-  if (!Object.prototype.hasOwnProperty.call(filter, '__')) {
+  let doubleUnderscoreReplacements = 0
+  if (!Object.prototype.hasOwnProperty.call(filter, "__")) {
     identifier = identifier.replace(/__/g, function () {
-      doubleUnderscoreReplacements += 1;
-      return '##';
-    });
+      doubleUnderscoreReplacements += 1
+      return "##"
+    })
   }
 
   identifier = identifier.replace(
     new RegExp(
       Object.keys(filter)
         .map(function (value) {
-          return '(' + value.replace(/[\\?*+|.^${}[\]()]/g, '\\$&') + ')';
+          return "(" + value.replace(/[\\?*+|.^${}[\]()]/g, "\\$&") + ")"
         })
-        .join('|'),
-      'g',
+        .join("|"),
+      "g"
     ),
     function (substring) {
-      return filter[substring];
-    },
-  );
+      return filter[substring]
+    }
+  )
   // Replace temporary placeholder '##' with '__' only if the original
   // identifier contained '__'.
   if (doubleUnderscoreReplacements > 0) {
-    identifier = identifier.replace(/##/g, '__');
+    identifier = identifier.replace(/##/g, "__")
   }
 
   // Valid characters in a CSS identifier are:
@@ -113,12 +113,12 @@ function cleanCssIdentifier(identifier, filter) {
   // We strip out any character not in the above list.
   identifier = identifier.replace(
     /(?:[\0-,./:-@[-^`{-\u00A0]|[\uD800-\uDBFF][\uDC00-\uDFFF])/g,
-    '',
-  );
+    ""
+  )
   // Identifiers cannot start with a digit, two hyphens, or a hyphen followed by a digit.
   // N.b.: This doesn't match the logic from core exactly, but the result is the same.
-  identifier = identifier.replace(/^\d/g, '_').replace(/^(-\d)|^(--)/g, '__');
-  return identifier;
+  identifier = identifier.replace(/^\d/g, "_").replace(/^(-\d)|^(--)/g, "__")
+  return identifier
 }
 
 /**
@@ -128,5 +128,5 @@ function cleanCssIdentifier(identifier, filter) {
  *   The shared configuration state object.
  */
 export function configInit(state) {
-  state.cleanClassCache = {};
+  state.cleanClassCache = {}
 }

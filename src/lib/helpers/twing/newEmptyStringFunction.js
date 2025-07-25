@@ -1,17 +1,17 @@
-import newTwingFunction from './newTwingFunction.js';
+import newTwingFunction from "./newTwingFunction.js"
 
 const newEmptyStringFunction = (
   functionName,
   options = {},
-  acceptedArguments = [],
+  acceptedArguments = []
 ) =>
   newTwingFunction(
     functionName,
     async function () {
-      return '';
+      return ""
     },
     options,
-    acceptedArguments,
-  );
+    acceptedArguments
+  )
 
-export default newEmptyStringFunction;
+export default newEmptyStringFunction

@@ -8,11 +8,11 @@
  * ```
  */
 
-export const name = 'clean_id';
+export const name = "clean_id"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Prepares a string for use as a valid HTML ID.
@@ -31,29 +31,29 @@ export const acceptedArguments = [];
 export function cleanID(id) {
   // Ensure a valid string is being passed.
   if (!id || !id.toLowerCase) {
-    return '';
+    return ""
   }
 
   const filter = {
-    ' ': '-',
-    _: '-',
-    '[': '-',
-    ']': '',
-  };
+    " ": "-",
+    _: "-",
+    "[": "-",
+    "]": "",
+  }
 
   id = id.toLowerCase().replace(
     new RegExp(
       Object.keys(filter)
         .map(function (value) {
-          return `(${value.replace(/[\\?*+|.^${}[\]()]/g, '\\$&')})`;
+          return `(${value.replace(/[\\?*+|.^${}[\]()]/g, "\\$&")})`
         })
-        .join('|'),
-      'g',
+        .join("|"),
+      "g"
     ),
     function (substring) {
-      return filter[substring];
-    },
-  );
+      return filter[substring]
+    }
+  )
 
   // As defined in http://www.w3.org/TR/html4/types.html#type-name, HTML IDs can
   // only contain letters, digits ([0-9]), hyphens ("-"), underscores ("_"),
@@ -61,9 +61,9 @@ export function cleanID(id) {
   // list. Note that the CSS spec doesn't allow colons or periods in identifiers
   // (http://www.w3.org/TR/CSS21/syndata.html#characters), so we strip those two
   // characters as well.
-  id = id.replace(/[^A-Za-z0-9\-_]/g, '');
+  id = id.replace(/[^A-Za-z0-9\-_]/g, "")
 
   // Removing multiple consecutive hyphens.
-  id = id.replace(/-+/g, '-');
-  return id;
+  id = id.replace(/-+/g, "-")
+  return id
 }

@@ -24,11 +24,11 @@
  * ```
  */
 
-export const name = 'file_url';
+export const name = "file_url"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [{ name: 'uri' }];
+export const acceptedArguments = [{ name: "uri" }]
 
 /**
  * Creates a root-relative web-accessible URL string.
@@ -49,11 +49,11 @@ export const acceptedArguments = [{ name: 'uri' }];
  */
 export function fileUrl(config, uri) {
   // Non-strings are cast to a string with Drupal's file_url.
-  const path = `${uri}`;
+  const path = `${uri}`
 
   // This regex matches against uri schemes (e.g. 'public://', 'https://'). It
   // is copied from \Drupal\Core\StreamWrapper\StreamWrapperManager::getScheme()
-  const scheme = /^([\w-]+):\/\//;
+  const scheme = /^([\w-]+):\/\//
 
   // If the uri includes a streamWrapper scheme, replace it.
   if (
@@ -62,8 +62,8 @@ export function fileUrl(config, uri) {
   ) {
     return `${config.baseUrl}${path.replace(
       scheme,
-      (substring) => config.streamWrapper[substring] + '/',
-    )}`;
+      (substring) => config.streamWrapper[substring] + "/"
+    )}`
   }
 
   // Allow for:
@@ -73,8 +73,8 @@ export function fileUrl(config, uri) {
   //   HTTP and to https://example.com/bar.jpg when viewing a HTTPS page)
   // Both types of relative URIs are characterized by a leading slash, hence
   // we can use a single check.
-  if (path.slice(0, 1) === '/') {
-    return path;
+  if (path.slice(0, 1) === "/") {
+    return path
   }
 
   // TODO: Add escaping of path, query and fragment.
@@ -93,7 +93,7 @@ export function fileUrl(config, uri) {
   //   $path .= '#' . $options['fragment'];
   // }
 
-  return path;
+  return path
 }
 
 /**
@@ -106,26 +106,26 @@ export function fileUrl(config, uri) {
  */
 export function configInit(state, config) {
   // The default Drupal base_url.
-  state.baseUrl = '/';
+  state.baseUrl = "/"
   // The default Drupal streamWrapper paths.
   state.streamWrapper = {
-    'public://': 'sites/default/files',
-    'private://': 'sites/default/private',
-    'temporary://': 'sites/default/tmp',
-  };
+    "public://": "sites/default/files",
+    "private://": "sites/default/private",
+    "temporary://": "sites/default/tmp",
+  }
 
-  if (Object.prototype.hasOwnProperty.call(config, 'base_url')) {
-    state.baseUrl = config.base_url;
-    if (state.baseUrl.slice(-1) !== '/') {
-      state.baseUrl += '/';
+  if (Object.prototype.hasOwnProperty.call(config, "base_url")) {
+    state.baseUrl = config.base_url
+    if (state.baseUrl.slice(-1) !== "/") {
+      state.baseUrl += "/"
     }
   }
 
-  if (Object.prototype.hasOwnProperty.call(config, 'streamWrapper')) {
+  if (Object.prototype.hasOwnProperty.call(config, "streamWrapper")) {
     // Merge the given streamWrapper with the defaults.
     state.streamWrapper = {
       ...state.streamWrapper,
       ...config.streamWrapper,
-    };
+    }
   }
 }

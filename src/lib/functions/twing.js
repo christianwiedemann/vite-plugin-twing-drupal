@@ -1,42 +1,42 @@
 import {
   newEmptyStringFunction,
   newPassThroughFunction,
-} from '../helpers/twing.js';
-import activeThemeFunction from './active_theme/twing.js';
-import activeThemePathFunction from './active_theme_path/twing.js';
+} from "../helpers/twing.js"
+import activeThemeFunction from "./active_theme/twing.js"
+import activeThemePathFunction from "./active_theme_path/twing.js"
 import {
   options as attachLibraryOptions,
   acceptedArguments as attachLibraryAcceptedArguments,
-} from './attach_library/definition.js';
-import createAttributeFunction from './create_attribute/twing.js';
-import fileUrlFunction from './file_url/twing.js';
-import testFunction from './test_function/twing.js';
-import linkFunction from './link/twing.js';
+} from "./attach_library/definition.js"
+import createAttributeFunction from "./create_attribute/twing.js"
+import fileUrlFunction from "./file_url/twing.js"
+import testFunction from "./test_function/twing.js"
+import linkFunction from "./link/twing.js"
 import {
   options as pathOptions,
   acceptedArguments as pathAcceptedArguments,
-} from './path/definition.js';
-import renderVarFunction from './render_var/twing.js';
+} from "./path/definition.js"
+import renderVarFunction from "./render_var/twing.js"
 import {
   options as urlOptions,
   acceptedArguments as urlAcceptedArguments,
-} from './url/definition.js';
+} from "./url/definition.js"
 
 const functions = [
   activeThemeFunction,
   activeThemePathFunction,
   newEmptyStringFunction(
-    'attach_library',
+    "attach_library",
     attachLibraryOptions,
-    attachLibraryAcceptedArguments,
+    attachLibraryAcceptedArguments
   ),
   createAttributeFunction,
   fileUrlFunction,
   linkFunction,
   testFunction,
-  newPassThroughFunction('path', pathOptions, pathAcceptedArguments),
+  newPassThroughFunction("path", pathOptions, pathAcceptedArguments),
   renderVarFunction,
-  newPassThroughFunction('url', urlOptions, urlAcceptedArguments),
-];
+  newPassThroughFunction("url", urlOptions, urlAcceptedArguments),
+]
 
-export default functions;
+export default functions

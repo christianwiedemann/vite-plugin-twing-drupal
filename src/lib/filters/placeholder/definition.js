@@ -33,17 +33,17 @@
  * ```
  */
 
-export const name = 'placeholder';
+export const name = "placeholder"
 
 export const options = {
-  is_safe: ['html'],
+  is_safe: ["html"],
   // PHP Twig option
   needs_environment: true,
   // Twing option
   needs_template: true,
-};
+}
 
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Helper used by the placeholder filters' callables.
@@ -55,5 +55,5 @@ export const acceptedArguments = [];
  *   The wrapped placeholder.
  */
 export function wrapPlaceholder(escapedValue) {
-  return escapedValue ? `<em class="placeholder">${escapedValue}</em>` : null;
+  return escapedValue ? `<em class="placeholder">${escapedValue}</em>` : null
 }

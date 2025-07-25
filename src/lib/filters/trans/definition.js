@@ -8,6 +8,6 @@
  * ```
  */
 
-export const name = 'trans';
+export const name = "trans"
 
-export { options, acceptedArguments } from '../t/definition.js';
+export { options, acceptedArguments } from "../t/definition.js"

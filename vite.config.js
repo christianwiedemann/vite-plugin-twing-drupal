@@ -20,7 +20,7 @@ export default defineConfig({
       include: ['buffer', 'stream', 'util', 'events', 'path'],
     }),
     precompileTwig({
-      include: /\.twig(\?.*)?$/     ,      // match bare and query imports.
+      include: /\.twig(\?.*)?$/,      // match bare and query imports.
       namespaces: {
         jabba: ['tests/fixtures/jabba'],
         tests: ['tests/fixtures']

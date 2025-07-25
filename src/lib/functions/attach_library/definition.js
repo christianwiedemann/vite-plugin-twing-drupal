@@ -20,8 +20,8 @@
  * ```
  */
 
-export const name = 'attach_library';
+export const name = "attach_library"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [{ name: 'library' }];
+export const acceptedArguments = [{ name: "library" }]

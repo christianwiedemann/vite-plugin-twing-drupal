@@ -8,11 +8,11 @@
  * ```
  */
 
-export const name = 'active_theme_path';
+export const name = "active_theme_path"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Gets the path of the active theme.
@@ -24,7 +24,7 @@ export const acceptedArguments = [];
  *   The path to the active theme.
  */
 export function activeThemePath(config) {
-  return config.activeThemePath;
+  return config.activeThemePath
 }
 
 /**
@@ -36,28 +36,28 @@ export function activeThemePath(config) {
  *   The Drupal config to save.
  */
 export function configInit(state, config) {
-  if (Object.prototype.hasOwnProperty.call(config, 'active_theme_path')) {
-    state.activeThemePath = config.active_theme_path;
+  if (Object.prototype.hasOwnProperty.call(config, "active_theme_path")) {
+    state.activeThemePath = config.active_theme_path
   } else {
     // If active_theme_path is not set, use active_theme to generate a path.
     switch (state.activeTheme) {
       // Drupal 9.3.x themes
-      case 'bartik':
-      case 'claro':
-      case 'classy':
-      case 'olivero':
-      case 'seven':
-      case 'stable':
-      case 'stable9':
-      case 'stark':
-        state.activeThemePath = `core/themes/${state.activeTheme}`;
-        break;
-      case 'umami':
-        state.activeThemePath = 'core/profiles/demo_umami/themes/umami';
-        break;
+      case "bartik":
+      case "claro":
+      case "classy":
+      case "olivero":
+      case "seven":
+      case "stable":
+      case "stable9":
+      case "stark":
+        state.activeThemePath = `core/themes/${state.activeTheme}`
+        break
+      case "umami":
+        state.activeThemePath = "core/profiles/demo_umami/themes/umami"
+        break
       default:
-        state.activeThemePath = `themes/custom/${state.activeTheme}`;
-        break;
+        state.activeThemePath = `themes/custom/${state.activeTheme}`
+        break
     }
   }
 }

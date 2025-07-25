@@ -1,17 +1,17 @@
-import newTwingFilter from './newTwingFilter.js';
+import newTwingFilter from "./newTwingFilter.js"
 
 const newPassThroughFilter = (
   filterName,
   options = {},
-  acceptedArguments = [],
+  acceptedArguments = []
 ) =>
   newTwingFilter(
     filterName,
     async function (value) {
-      return value;
+      return value
     },
     options,
-    acceptedArguments,
-  );
+    acceptedArguments
+  )
 
-export default newPassThroughFilter;
+export default newPassThroughFilter

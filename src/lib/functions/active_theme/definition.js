@@ -8,11 +8,11 @@
  * ```
  */
 
-export const name = 'active_theme';
+export const name = "active_theme"
 
-export const options = {};
+export const options = {}
 
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Gets the name of the active theme.
@@ -24,7 +24,7 @@ export const acceptedArguments = [];
  *   The name of the active theme.
  */
 export function activeTheme(config) {
-  return config.activeTheme;
+  return config.activeTheme
 }
 
 /**
@@ -37,9 +37,9 @@ export function activeTheme(config) {
  */
 export function configInit(state, config) {
   // The default active theme in the Drupal minimal install profile.
-  state.activeTheme = 'stark';
+  state.activeTheme = "stark"
 
-  if (Object.prototype.hasOwnProperty.call(config, 'active_theme')) {
-    state.activeTheme = config.active_theme;
+  if (Object.prototype.hasOwnProperty.call(config, "active_theme")) {
+    state.activeTheme = config.active_theme
   }
 }

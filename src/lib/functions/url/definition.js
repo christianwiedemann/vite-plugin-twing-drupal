@@ -30,17 +30,17 @@
  * ```
  */
 
-export const name = 'url';
+export const name = "url"
 
 export const options = {
   // Drupal defines this function with the is_safe_callback option set to
   // Drupal\Core\Template\TwigExtension::isUrlGenerationSafe.
   // We use the is_safe option instead:
-  is_safe: ['html'],
-};
+  is_safe: ["html"],
+}
 
 export const acceptedArguments = [
-  { name: 'name' },
-  { name: 'parameters', defaultValue: {} },
-  { name: 'options', defaultValue: {} },
-];
+  { name: "name" },
+  { name: "parameters", defaultValue: {} },
+  { name: "options", defaultValue: {} },
+]

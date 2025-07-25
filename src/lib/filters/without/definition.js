@@ -8,16 +8,16 @@
  * ```
  */
 
-import cloneDeep from 'lodash.clonedeep';
+import cloneDeep from "lodash.clonedeep"
 
-export const name = 'without';
+export const name = "without"
 
 export const options = {
   is_variadic: true,
-};
+}
 
 // The is_variadic option means this filter accepts a variable number of args.
-export const acceptedArguments = [];
+export const acceptedArguments = []
 
 /**
  * Removes child elements from a copy of the original array.
@@ -38,25 +38,25 @@ export const acceptedArguments = [];
  */
 export function without(element) {
   if (!element) {
-    return {};
+    return {}
   }
 
-  const filteredElement = cloneDeep(element);
+  const filteredElement = cloneDeep(element)
 
-  let args = Array.prototype.slice.call(arguments, 1);
+  let args = Array.prototype.slice.call(arguments, 1)
   if (args.length) {
-    let exclude = [];
+    let exclude = []
     args.forEach((name) => {
       if (Array.isArray(name)) {
-        exclude = exclude.concat(name);
+        exclude = exclude.concat(name)
       } else {
-        exclude.push(name);
+        exclude.push(name)
       }
-    });
+    })
     exclude.forEach((name) => {
-      delete filteredElement[name];
-    });
+      delete filteredElement[name]
+    })
   }
 
-  return filteredElement;
+  return filteredElement
 }

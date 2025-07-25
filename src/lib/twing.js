@@ -1,8 +1,8 @@
-import filters from './filters/twing.js';
-import functions from './functions/twing.js';
-import filtersConfigInit from './filters/configInit.js';
-import functionsConfigInit from './functions/configInit.js';
-import state from './config.js';
+import filters from "./filters/twing.js"
+import functions from "./functions/twing.js"
+import filtersConfigInit from "./filters/configInit.js"
+import functionsConfigInit from "./functions/configInit.js"
+import state from "./config.js"
 
 /**
  * Adds all the extensions to the given Twing environment.
@@ -14,16 +14,15 @@ import state from './config.js';
  */
 export function addDrupalExtensions(twingEnvironment, config = {}) {
   filters.forEach((twingFilter) => {
-    twingEnvironment.addFilter(twingFilter);
-  });
+    twingEnvironment.addFilter(twingFilter)
+  })
 
   functions.forEach((twingFunction) => {
-    twingEnvironment.addFunction(twingFunction);
-  });
-
-  [...filtersConfigInit, ...functionsConfigInit].forEach((configInit) => {
-    configInit(state, config);
-  });
+    twingEnvironment.addFunction(twingFunction)
+  })
+  ;[...filtersConfigInit, ...functionsConfigInit].forEach((configInit) => {
+    configInit(state, config)
+  })
 }
 
-export { default as Attribute } from './Attribute.js';
+export { default as Attribute } from "./Attribute.js"
