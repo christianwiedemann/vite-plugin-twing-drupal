@@ -10,7 +10,6 @@ import {
 } from "./attach_library/definition.js"
 import createAttributeFunction from "./create_attribute/twing.js"
 import fileUrlFunction from "./file_url/twing.js"
-import testFunction from "./test_function/twing.js"
 import linkFunction from "./link/twing.js"
 import {
   options as pathOptions,
@@ -33,7 +32,6 @@ const functions = [
   createAttributeFunction,
   fileUrlFunction,
   linkFunction,
-  testFunction,
   newPassThroughFunction("path", pathOptions, pathAcceptedArguments),
   renderVarFunction,
   newPassThroughFunction("url", urlOptions, urlAcceptedArguments),

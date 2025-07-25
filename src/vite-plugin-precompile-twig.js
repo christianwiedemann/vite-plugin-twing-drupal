@@ -342,7 +342,13 @@ function createTemplateResolver(
  * @param {string} cwd - Current working directory
  * @returns {string} - Generated module content
  */
-function generateModuleContent(key, templateSources, resolvedNamespaces, cwd) {
+function generateModuleContent(
+  key,
+  templateSources,
+  resolvedNamespaces,
+  cwd,
+  initEnvironment
+) {
   const allSourcesString = Object.entries(templateSources)
     .map(
       ([templateKey, templateContent]) =>
@@ -357,6 +363,10 @@ function generateModuleContent(key, templateSources, resolvedNamespaces, cwd) {
     )
     .join(",\n    ")
 
+  const initEnvironmentString = initEnvironment
+    ? `import { initEnvironment } from '/${relative(cwd, initEnvironment)}'; initEnvironment(env);`
+    : ""
+
   return `
     import { createEnvironment } from 'twing';
 
@@ -364,12 +374,12 @@ function generateModuleContent(key, templateSources, resolvedNamespaces, cwd) {
       cwd,
       resolve(__dirname, "./lib/twing.js")
     )}';
+    
     import createSDCLoader from '/${relative(
       cwd,
       resolve(__dirname, "./loader/createSDCLoader.js")
     )}';
     
-  
     // Include all templates, including namespaced ones.
     const allSources = {
       ${allSourcesString}
@@ -383,6 +393,7 @@ function generateModuleContent(key, templateSources, resolvedNamespaces, cwd) {
     const loader = createSDCLoader(allSources, twingNamespaces);
     const env = createEnvironment(loader);
     addDrupalExtensions(env);
+    ${initEnvironmentString}
     
     
     /**
@@ -496,7 +507,11 @@ function createHMRHelpers(
  * @returns {Object} - Vite plugin configuration
  */
 export default function precompileTwigPlugin(options = {}) {
-  const { include = /\.twig(\?.*)?$/, namespaces = {} } = options
+  const {
+    initEnvironment,
+    include = /\.twig(\?.*)?$/,
+    namespaces = {},
+  } = options
 
   const cwd = typeof process !== "undefined" ? process.cwd() : "."
 
@@ -561,7 +576,8 @@ export default function precompileTwigPlugin(options = {}) {
         key,
         templateSources,
         resolvedNamespaces,
-        cwd
+        cwd,
+        initEnvironment
       )
     },
 
