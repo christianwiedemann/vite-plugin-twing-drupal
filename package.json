@@ -1,7 +1,7 @@
 {
   "name": "vite-plugin-twing-drupal",
-  "version": "0.0.1",
-  "description": "Provides a ⚡️ Vite plugin to transform 🌱 Twig into HTML with a 💧 Drupal flavour",
+  "version": "1.0.1",
+  "description": "Provides a ⚡️ Vite plugin to transform 🌱 Twing.js into HTML with a 💧 Drupal flavour",
   "keywords": [
     "Vite",
     "Vite plugin",
