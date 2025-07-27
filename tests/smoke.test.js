@@ -1,9 +1,13 @@
 import Markup from "../dist/test.js"
 import { describe, expect, it } from "vitest"
-import { createEnvironment } from 'twing';
 describe("Basic smoke test", () => {
   it("Should support includes", async () => {
-    const markup = await Markup.render(createEnvironment(), {'the': 'variables', 'go': 'here'});
+    const markup = Markup.render({
+      'the': 'variables',
+      'go': 'here',
+      'markup': '<div>Sample Markup</div>',
+      'array': ['<div>Sample Markup</div>', '<div>Sample Markup2</div>']
+    });
 
     expect(markup).toMatchSnapshot()
     expect(markup).toContain("Nested include")

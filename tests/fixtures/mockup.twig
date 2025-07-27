@@ -10,12 +10,10 @@
 {% endembed %}
 {% include "@tests/section.twig" %}
 {% include "@tests/section.twig" with {title: 'Relative include'} %}
-{% embed 'jabba:card' with {
+{{ include('jabba:card', {
     title: 'SDC',
     teaser: 'Card',
-} %}
-{% endembed %}
-{% embed 'jabba:button' with {
+}) }}{% embed 'jabba:button' with {
     title: 'SDC',
 } %}
 {% endembed %}

@@ -368,7 +368,7 @@ function generateModuleContent(
     : ""
 
   return `
-    import { createEnvironment } from 'twing';
+    import { createSynchronousEnvironment } from 'twing';
 
     import { addDrupalExtensions } from '@christianwiedemann/drupal-twig-extensions/twing';
     
@@ -388,7 +388,7 @@ function generateModuleContent(
     
     // Create a loader and environment.
     const loader = createSDCLoader(allSources, twingNamespaces);
-    const env = createEnvironment(loader);
+    const env = createSynchronousEnvironment(loader);
     addDrupalExtensions(env);
     ${initEnvironmentString}
     
