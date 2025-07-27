@@ -52,6 +52,7 @@ const getTemplateByColon = (templateParts, templates) => {
  */
 
 export function createSDCLoader(templates, namespaces, name = "sdc-array") {
+  console.log(Object.keys(templates));
   // Get the base array loader
   const baseLoader = createSynchronousArrayLoader(templates)
 

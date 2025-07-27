@@ -52,7 +52,7 @@ export default function getComponentReferences(
         const fullPath = path.join(dir, entry.name)
         if (entry.isDirectory()) {
           walkDirectory(fullPath, fileList)
-        } else if (entry.isFile() && entry.name.endsWith(".twig")) {
+        } else if (entry.isFile() && (entry.name.endsWith(".twig"))) {
           fileList.push(fullPath)
         }
       }
@@ -94,12 +94,7 @@ export default function getComponentReferences(
       while ((match = pattern.exec(content)) !== null) {
         const ref = match[1]
         // Convert mercury: format to @mercury format
-        if (ref.startsWith("mercury:")) {
-          const componentName = ref.replace("mercury:", "")
-          matches.push(`@mercury/${componentName}/${componentName}.twig`)
-        } else {
-          matches.push(ref)
-        }
+        matches.push(ref)
       }
       return matches
     })

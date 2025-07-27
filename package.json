@@ -18,6 +18,7 @@
     "format": "prettier --write \"{test,src}/**/*.js\"",
     "lint": "prettier --check \"{test,src}/**/*.js\"",
     "test": "vitest run",
+    "update-snapshot": "vitest -u",
     "test:debug": "node --inspect-brk node_modules/.bin/vitest run",
     "pretest": "npm run-script build",
     "semantic-release": "semantic-release"

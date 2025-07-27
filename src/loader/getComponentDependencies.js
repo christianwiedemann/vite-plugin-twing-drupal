@@ -9,7 +9,6 @@ import path from "path"
  */
 export default function getComponentDependencies(namespaces, componentFiles) {
   const findFileInNamespaces = (filePath) => {
-    // Handle namespaced paths (e.g., @mercury/heading/heading.twig)
     if (filePath.startsWith("@")) {
       const [namespace, ...rest] = filePath.slice(1).split("/")
       const namespacePaths = namespaces[namespace]
@@ -58,6 +57,7 @@ export default function getComponentDependencies(namespaces, componentFiles) {
       /{%\s*extends\s+['"]([^'"]+)['"]\s*%}/g,
       /{{?\s*include\s*\(\s*['"]([^'"]+)['"]/g, // Updated to catch include() with parameters
       /{%\s*include\s+['"]([^'"]+)['"]\s*%}/g, // Keep original include pattern
+      /{%\s*source\s+['"]([^'"]+)['"]\s*%}/g, // Keep original include pattern
       /{%\s*embed\s+['"]([^'"]+)['"](\s+with\s+{[^}]*})?\s*%}/g, // Updated to handle with clause
       /{%\s*import\s+['"]([^'"]+)['"]\s*%}/g,
       /{%\s*from\s+['"]([^'"]+)['"]\s*%}/g,
@@ -68,13 +68,7 @@ export default function getComponentDependencies(namespaces, componentFiles) {
       let match
       while ((match = pattern.exec(content)) !== null) {
         const dep = match[1]
-        // Convert mercury: format to @mercury format
-        if (dep.startsWith("mercury:")) {
-          const componentName = dep.replace("mercury:", "")
-          matches.push(`@mercury/${componentName}/${componentName}.twig`)
-        } else {
-          matches.push(dep)
-        }
+        matches.push(dep)
       }
       return matches
     })
@@ -99,12 +93,6 @@ export default function getComponentDependencies(namespaces, componentFiles) {
       const twigDeps = extractDependencies(content)
       // Process each Twig dependency recursively and collect their JS files
       const twigDepResults = twigDeps.flatMap((dep) => {
-        // If it's a mercury: dependency, convert it to the proper format
-        if (dep.startsWith("mercury:")) {
-          const componentName = dep.replace("mercury:", "")
-          const twigPath = `@mercury/${componentName}/${componentName}.twig`
-          return processFile(twigPath, processed)
-        }
         return processFile(dep, processed)
       })
 

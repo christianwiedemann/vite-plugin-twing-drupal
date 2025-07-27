@@ -59,7 +59,7 @@ function collectTemplatesFromDirectory(dir, filemap = {}, prefix = "") {
           filemap,
           prefix ? `${prefix}/${entry.name}` : entry.name
         )
-      } else if (entry.isFile() && /\.twig$/.test(entry.name)) {
+      } else if (entry.isFile() && (/\.twig$/.test(entry.name) || /\.svg/.test(entry.name))) {
         const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name
         filemap[relativePath] = readFileSync(full, "utf8")
       }
