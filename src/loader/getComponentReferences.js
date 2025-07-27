@@ -52,7 +52,7 @@ export default function getComponentReferences(
         const fullPath = path.join(dir, entry.name)
         if (entry.isDirectory()) {
           walkDirectory(fullPath, fileList)
-        } else if (entry.isFile() && (entry.name.endsWith(".twig"))) {
+        } else if (entry.isFile() && entry.name.endsWith(".twig")) {
           fileList.push(fullPath)
         }
       }
