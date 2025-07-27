@@ -3,7 +3,7 @@
  * Based on Twing's createArrayLoader with SDC-specific enhancements
  */
 
-import { createArrayLoader } from "twing"
+import { createSynchronousArrayLoader } from "twing"
 
 /**
  * Determines if a template name refers to an SDC component
@@ -53,7 +53,7 @@ const getTemplateByColon = (templateParts, templates) => {
 
 export function createSDCLoader(templates, namespaces, name = "sdc-array") {
   // Get the base array loader
-  const baseLoader = createArrayLoader(templates)
+  const baseLoader = createSynchronousArrayLoader(templates)
 
   // Create a wrapper around the base loader to add SDC-specific functionality
   const enhancedLoader = {
