@@ -22,7 +22,7 @@ export default defineConfig({
     precompileTwig({
       include: /\.twig(\?.*)?$/,
       // match bare and query imports.
-      initEnvironment: resolve('./init-twing.js'),
+      hooks: resolve('./twing-hooks.js'),
       namespaces: {
         jabba: ['tests/fixtures/jabba'],
         tests: ['tests/fixtures']
