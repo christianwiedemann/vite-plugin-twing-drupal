@@ -350,7 +350,7 @@ function generateModuleContent(
   templateSources,
   resolvedNamespaces,
   cwd,
-  initEnvironment
+  hooks
 ) {
   const allSourcesString = Object.entries(templateSources)
     .map(
@@ -366,8 +366,8 @@ function generateModuleContent(
     )
     .join(",\n    ")
 
-  const initEnvironmentString = initEnvironment
-    ? `import { initEnvironment } from '/${relative(cwd, initEnvironment)}'; initEnvironment(env);`
+  const hooksString = hooks
+    ? `import { initEnvironment } from '/${relative(cwd, hooks)}'; initEnvironment(env);`
     : ""
 
   return `
@@ -393,7 +393,7 @@ function generateModuleContent(
     const loader = createSDCLoader(allSources, twingNamespaces);
     const env = createSynchronousEnvironment(loader);
     addDrupalExtensions(env);
-    ${initEnvironmentString}
+    ${hooksString}
     
     class PrintableArrayWrapper {
       constructor(array) {
@@ -534,11 +534,7 @@ function createHMRHelpers(
  * @returns {Object} - Vite plugin configuration
  */
 export default function precompileTwigPlugin(options = {}) {
-  const {
-    initEnvironment,
-    include = /\.twig(\?.*)?$/,
-    namespaces = {},
-  } = options
+  const { hooks, include = /\.twig(\?.*)?$/, namespaces = {} } = options
 
   const cwd = typeof process !== "undefined" ? process.cwd() : "."
 
@@ -604,7 +600,7 @@ export default function precompileTwigPlugin(options = {}) {
         templateSources,
         resolvedNamespaces,
         cwd,
-        initEnvironment
+        hooks
       )
     },
 
