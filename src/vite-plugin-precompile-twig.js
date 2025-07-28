@@ -337,6 +337,7 @@ function createTemplateResolver(
   }
 }
 
+
 /**
  * Generate module content for Twig template
  * @param {string} key - Template key
@@ -395,6 +396,28 @@ function generateModuleContent(
     addDrupalExtensions(env);
     ${initEnvironmentString}
     
+    class PrintableArrayWrapper {
+      constructor(array) {
+        this.items = array;
+      }
+      [Symbol.iterator]() {
+        let index = 0;
+        const data = this.items;
+    
+        return {
+          next() {
+            if (index < data.length) {
+              return { value: data[index++], done: false };
+            } else {
+              return { done: true };
+            }
+          }
+        };
+      }
+      toString() {
+        return this.items.join("\\n");
+      }
+    }
     
     /**
      * Renders the preloaded Twig template.
@@ -402,6 +425,11 @@ function generateModuleContent(
      * @returns {Promise<string>}
      */
     export function render(context = {}) {
+      Object.keys(context).forEach((key)=>{
+        if (Array.isArray(context[key])) {
+          context[key] = new PrintableArrayWrapper(context[key]);
+        }
+      });
       return env.render('${key}', context);
     }
 
