@@ -337,7 +337,6 @@ function createTemplateResolver(
   }
 }
 
-
 /**
  * Generate module content for Twig template
  * @param {string} key - Template key
@@ -402,12 +401,12 @@ function generateModuleContent(
       }
       [Symbol.iterator]() {
         let index = 0;
-        const data = this.items;
+        const items = this.items;
     
         return {
           next() {
-            if (index < data.length) {
-              return { value: data[index++], done: false };
+            if (index < items.length) {
+              return { value: items[index++], done: false };
             } else {
               return { done: true };
             }
