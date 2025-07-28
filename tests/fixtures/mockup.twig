@@ -28,4 +28,14 @@
 {% set at = create_attribute() %}
 {% include "extender.twig" %}
 
+<div class="array">
+{{ array }}
+    <h2> LOOP </h2>
+{% for a in array %}
+{{ a }}
+{% endfor %}
+</div>
+
+<div class="svg">
 {{ source('@jabba/card/knife.svg') }}
+</div>
