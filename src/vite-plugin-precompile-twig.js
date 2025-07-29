@@ -371,6 +371,7 @@ function generateModuleContent(
     : ""
 
   return `
+    import DrupalAttribute from 'drupal-attribute';
     import { createSynchronousEnvironment } from 'twing';
 
     import { addDrupalExtensions } from '@christianwiedemann/drupal-twig-extensions/twing';
@@ -424,6 +425,9 @@ function generateModuleContent(
      * @returns {Promise<string>}
      */
     export function render(context = {}) {
+      if (!context['attributes']) {
+        context['attributes'] = new DrupalAttribute();
+      }
       Object.keys(context).forEach((key)=>{
         if (Array.isArray(context[key])) {
           context[key] = new PrintableArrayWrapper(context[key]);
