@@ -28,7 +28,7 @@
     "url": "https://github.com/christianwiedemann/vite-plugin-twing-drupal.git"
   },
   "dependencies": {
-    "drupal-attribute": "^1.0.2",
+    "drupal-attribute": "^1.1.0",
     "locutus": "^2.0.32",
     "lodash.clonedeep": "^4.5.0",
     "twing": "^7.1.0",
