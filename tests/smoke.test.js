@@ -2,6 +2,7 @@ import Markup from "../dist/test.js"
 import { describe, expect, it } from "vitest"
 describe("Basic smoke test", () => {
   it("Should support includes", async () => {
+
     const markup = Markup.render({
       'the': 'variables',
       'go': 'here',

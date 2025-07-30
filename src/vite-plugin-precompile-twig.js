@@ -350,7 +350,7 @@ function generateModuleContent(
   templateSources,
   resolvedNamespaces,
   cwd,
-  initEnvironment
+  hooks
 ) {
   const allSourcesString = Object.entries(templateSources)
     .map(
@@ -366,11 +366,12 @@ function generateModuleContent(
     )
     .join(",\n    ")
 
-  const initEnvironmentString = initEnvironment
-    ? `import { initEnvironment } from '/${relative(cwd, initEnvironment)}'; initEnvironment(env);`
+  const hooksString = hooks
+    ? `import { initEnvironment } from '/${relative(cwd, hooks)}'; initEnvironment(env);`
     : ""
 
   return `
+    import DrupalAttribute from 'drupal-attribute';
     import { createSynchronousEnvironment } from 'twing';
 
     import { addDrupalExtensions } from '@christianwiedemann/drupal-twig-extensions/twing';
@@ -393,8 +394,30 @@ function generateModuleContent(
     const loader = createSDCLoader(allSources, twingNamespaces);
     const env = createSynchronousEnvironment(loader);
     addDrupalExtensions(env);
-    ${initEnvironmentString}
+    ${hooksString}
     
+    class PrintableArrayWrapper {
+      constructor(array) {
+        this.items = array;
+      }
+      [Symbol.iterator]() {
+        let index = 0;
+        const items = this.items;
+    
+        return {
+          next() {
+            if (index < items.length) {
+              return { value: items[index++], done: false };
+            } else {
+              return { done: true };
+            }
+          }
+        };
+      }
+      toString() {
+        return this.items.join("\\n");
+      }
+    }
     
     /**
      * Renders the preloaded Twig template.
@@ -402,6 +425,14 @@ function generateModuleContent(
      * @returns {Promise<string>}
      */
     export function render(context = {}) {
+      if (!context['attributes']) {
+        context['attributes'] = new DrupalAttribute();
+      }
+      Object.keys(context).forEach((key)=>{
+        if (Array.isArray(context[key])) {
+          context[key] = new PrintableArrayWrapper(context[key]);
+        }
+      });
       return env.render('${key}', context);
     }
 
@@ -507,11 +538,7 @@ function createHMRHelpers(
  * @returns {Object} - Vite plugin configuration
  */
 export default function precompileTwigPlugin(options = {}) {
-  const {
-    initEnvironment,
-    include = /\.twig(\?.*)?$/,
-    namespaces = {},
-  } = options
+  const { hooks, include = /\.twig(\?.*)?$/, namespaces = {} } = options
 
   const cwd = typeof process !== "undefined" ? process.cwd() : "."
 
@@ -577,7 +604,7 @@ export default function precompileTwigPlugin(options = {}) {
         templateSources,
         resolvedNamespaces,
         cwd,
-        initEnvironment
+        hooks
       )
     },
 
