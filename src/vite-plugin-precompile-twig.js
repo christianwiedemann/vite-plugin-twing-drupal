@@ -425,7 +425,7 @@ function generateModuleContent(
      * @returns {Promise<string>}
      */
     export function render(context = {}) {
-      context['attributes'] = new DrupalAttribute(Object.entries(context['attributes']) ?? []);
+      context['attributes'] = new DrupalAttribute(Object.entries(context['attributes'] ?? {}));
       Object.keys(context).forEach((key)=>{
         if (Array.isArray(context[key])) {
           context[key] = new PrintableArrayWrapper(context[key]);
