@@ -65,6 +65,8 @@ function collectTemplatesFromDirectory(dir, filemap = {}, prefix = "") {
       ) {
         const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name
         filemap[relativePath] = readFileSync(full, "utf8")
+        const realToRoot = relative(process.cwd(), full)
+        filemap[realToRoot] = filemap[relativePath]
       }
     }
   } catch (err) {
