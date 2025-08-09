@@ -400,6 +400,7 @@ function generateModuleContent(
     
     class PrintableArrayWrapper {
       constructor(array) {
+      
         this.items = array;
       }
       [Symbol.iterator]() {
@@ -427,12 +428,18 @@ function generateModuleContent(
      * @returns {Promise<string>}
      */
     export function render(context = {}) {
-      if (!context['attributes']) {
-        context['attributes'] = new DrupalAttribute();
+      if (context['attributes'] && context['attributes']['class']) {
+        if (!Array.isArray(context['attributes']['class'])) {
+          context['attributes']['class'] = [context['attributes']['class']]
+        }
       }
+      context['attributes'] = new DrupalAttribute(Object.entries(context['attributes'] ?? {}));
       Object.keys(context).forEach((key)=>{
         if (Array.isArray(context[key])) {
           context[key] = new PrintableArrayWrapper(context[key]);
+        }
+        if (typeof context[key] === 'function') {
+          context[key] = context[key]();
         }
       });
       return env.render('${key}', context);
@@ -577,7 +584,7 @@ export default function precompileTwigPlugin(options = {}) {
     },
 
     load(id) {
-      const clean = id.split("?")[0]
+      const clean = id.split("?")[0].replace(/^\.\//, '');
       if (!include.test(clean)) return null
 
       console.log(`[Twig] Resolving template: ${clean}`)

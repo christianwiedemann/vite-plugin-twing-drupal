@@ -6,6 +6,10 @@ describe("Basic smoke test", () => {
     const markup = Markup.render({
       'the': 'variables',
       'go': 'here',
+      'attributes': {
+        'class': 'provided-class'
+      },
+      'contentfunction': ()=>{ return 'content function'},
       'markup': '<div>Sample Markup</div>',
       'array': ['<div>Sample Markup</div>', '<div>Sample Markup2</div>']
     });
