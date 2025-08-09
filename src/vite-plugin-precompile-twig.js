@@ -584,7 +584,7 @@ export default function precompileTwigPlugin(options = {}) {
     },
 
     load(id) {
-      const clean = id.split("?")[0].replace(/^\.\//, '');
+      const clean = id.split("?")[0].replace(/^\.\//, "")
       if (!include.test(clean)) return null
 
       console.log(`[Twig] Resolving template: ${clean}`)
