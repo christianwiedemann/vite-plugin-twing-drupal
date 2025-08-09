@@ -438,6 +438,9 @@ function generateModuleContent(
         if (Array.isArray(context[key])) {
           context[key] = new PrintableArrayWrapper(context[key]);
         }
+        if (typeof context[key] === 'function') {
+          context[key] = context[key]();
+        }
       });
       return env.render('${key}', context);
     }
@@ -581,7 +584,7 @@ export default function precompileTwigPlugin(options = {}) {
     },
 
     load(id) {
-      const clean = id.split("?")[0]
+      const clean = id.split("?")[0].replace(/^\.\//, '');
       if (!include.test(clean)) return null
 
       console.log(`[Twig] Resolving template: ${clean}`)
