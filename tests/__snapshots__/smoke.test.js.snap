@@ -56,5 +56,7 @@ exports[`Basic smoke test > Should support includes 1`] = `
 </div>
 
 <div  class="provided-class added-class"></div>
+
+content function
 "
 `;

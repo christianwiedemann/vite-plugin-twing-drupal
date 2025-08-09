@@ -9,6 +9,7 @@ describe("Basic smoke test", () => {
       'attributes': {
         'class': 'provided-class'
       },
+      'contentfunction': ()=>{ return 'content function'},
       'markup': '<div>Sample Markup</div>',
       'array': ['<div>Sample Markup</div>', '<div>Sample Markup2</div>']
     });
