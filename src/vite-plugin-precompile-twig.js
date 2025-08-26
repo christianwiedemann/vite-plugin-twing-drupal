@@ -208,7 +208,7 @@ function resolveAbsolutePath(
   resolvedNamespaces,
   templateSources
 ) {
-  path = path.replace('/@fs', '')
+  path = path.replace("/@fs", "")
   if (!existsSync(path)) {
     return null
   }
@@ -584,10 +584,9 @@ export default function precompileTwigPlugin(options = {}) {
     },
 
     load(id) {
-
       const clean = id.split("?")[0].replace(/^\.\//, "")
       if (!include.test(clean)) return null
-      console.log('ID: ' + id);
+      console.log("ID: " + id)
       console.log(`[Twig] Resolving template: ${clean}`)
       const resolved = resolveTemplate(clean)
 
