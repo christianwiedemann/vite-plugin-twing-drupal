@@ -208,6 +208,7 @@ function resolveAbsolutePath(
   resolvedNamespaces,
   templateSources
 ) {
+  path = path.replace('/@fs', '')
   if (!existsSync(path)) {
     return null
   }
@@ -400,7 +401,6 @@ function generateModuleContent(
     
     class PrintableArrayWrapper {
       constructor(array) {
-      
         this.items = array;
       }
       [Symbol.iterator]() {
@@ -584,9 +584,10 @@ export default function precompileTwigPlugin(options = {}) {
     },
 
     load(id) {
+
       const clean = id.split("?")[0].replace(/^\.\//, "")
       if (!include.test(clean)) return null
-
+      console.log('ID: ' + id);
       console.log(`[Twig] Resolving template: ${clean}`)
       const resolved = resolveTemplate(clean)
 
