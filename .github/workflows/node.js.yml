@@ -1,4 +1,7 @@
 name: validate
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 on:
   push:
     branches:
