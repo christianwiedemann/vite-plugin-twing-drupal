@@ -18,4 +18,18 @@ describe("Basic smoke test", () => {
     expect(markup).toContain("Nested include")
     expect(markup).toContain("Relative include")
   })
+
+  it("Should resolve relative ./ includes", async () => {
+    const markup = Markup.render({
+      attributes: { class: 'test' },
+    });
+    expect(markup).toContain("resolved via ./ path")
+  })
+
+  it("Should resolve relative ../ includes", async () => {
+    const markup = Markup.render({
+      attributes: { class: 'test' },
+    });
+    expect(markup).toContain("Parent relative include")
+  })
 })

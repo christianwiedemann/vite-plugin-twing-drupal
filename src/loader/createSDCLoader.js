@@ -113,6 +113,8 @@ export function createSDCLoader(templates, namespaces, name = "sdc-array") {
         }
         const resolved = normalized.join("/")
         if (templates[resolved] !== undefined) {
+          // Register under the relative key so getSource can find it
+          templates[name] = templates[resolved]
           return resolved
         }
       }

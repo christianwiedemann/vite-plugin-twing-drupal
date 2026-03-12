@@ -6,3 +6,10 @@
 {% include 'jabba:button' with {
   title: 'nested button 🙌',
 } %}
+{% include './card--teaser.twig' with {
+  title: 'Relative include',
+  summary: 'resolved via ./ path',
+} %}
+{% include '../atoms/badge/badge.twig' with {
+  label: 'Parent relative include 🔼',
+} %}
