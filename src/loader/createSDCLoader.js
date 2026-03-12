@@ -101,6 +101,24 @@ export function createSDCLoader(templates, namespaces, name = "sdc-array") {
       console.log(
         `[SDC Loader] Resolving template: ${name} ${from ? `from ${from}` : ""}`
       )
+
+      // Resolve relative paths (./foo.twig, ../bar.twig) against the parent template
+      if (from && (name.startsWith("./") || name.startsWith("../"))) {
+        const dir = from.substring(0, from.lastIndexOf("/"))
+        const parts = `${dir}/${name}`.split("/")
+        const normalized = []
+        for (const part of parts) {
+          if (part === "..") normalized.pop()
+          else if (part !== ".") normalized.push(part)
+        }
+        const resolved = normalized.join("/")
+        if (templates[resolved] !== undefined) {
+          // Register under the relative key so getSource can find it
+          templates[name] = templates[resolved]
+          return resolved
+        }
+      }
+
       // If baseLoader has resolve method, use it
       if (typeof baseLoader.resolve === "function") {
         return baseLoader.resolve(name, from)

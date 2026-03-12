@@ -480,11 +480,33 @@ function createHMRHelpers(
 
   function getTemplatesForUpdate(originalFile) {
     const originalTemplate = resolveTemplateWithErrorHandling(originalFile)
-    if (!originalTemplate) {
-      return []
+    if (originalTemplate) {
+      return [originalTemplate]
     }
 
-    return [originalTemplate]
+    // Template not in cache — try to register it as a new file.
+    // This handles Twig partials (e.g. variant includes like card--horizontal.twig)
+    // that were created after the dev server started.
+    if (existsSync(originalFile)) {
+      const content = readFileSync(originalFile, "utf8")
+
+      // Try to determine the namespace key for this file
+      for (const [namespace, dirPaths] of Object.entries(resolvedNamespaces)) {
+        for (const dir of dirPaths) {
+          if (originalFile.startsWith(dir)) {
+            const relativePath = relative(dir, originalFile).replace(/\\/g, "/")
+            const key = `@${namespace}/${relativePath}`
+            templateSources[key] = content
+            // Also register with the relative path for direct lookups
+            templateSources[relativePath] = content
+            console.log(`[HMR] Registered new template: ${key}`)
+            return [{ key, content }]
+          }
+        }
+      }
+    }
+
+    return []
   }
 
   function updateTemplateCache(templates) {

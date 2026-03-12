@@ -31,12 +31,22 @@ exports[`Basic smoke test > Should support includes 1`] = `
 <p>Card</p>
 <div>atom badge from nested dir 🙌</div>
 <button>nested button 🙌</button>
+<div class="card-teaser">
+  <h3>Relative include</h3>
+  <span>resolved via ./ path</span>
+</div>
+<div>Parent relative include 🔼</div>
 <button>SDC</button>
 <button>included button 👈️</button>
 <h2>Include card</h2>
 <p>🏆️ winning</p>
 <div>atom badge from nested dir 🙌</div>
 <button>nested button 🙌</button>
+<div class="card-teaser">
+  <h3>Relative include</h3>
+  <span>resolved via ./ path</span>
+</div>
+<div>Parent relative include 🔼</div>
 <div  class="provided-class">hey there</div>
   All received
     pony town
