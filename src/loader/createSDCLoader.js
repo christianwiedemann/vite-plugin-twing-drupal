@@ -43,6 +43,21 @@ const getTemplateByColon = (templateParts, templates) => {
 }
 
 /**
+ * Resolves a colon-syntax template name (e.g. "my_theme:button") to its
+ * @namespace key in the templates object (e.g. "@my_theme/button/button.twig").
+ * Returns the matching key or null if not found.
+ */
+const resolveColonName = (name, templates) => {
+  if (!name.includes(":")) return null
+  const [namespace, templateName] = name.split(":")
+  const matchingEntry = Object.entries(templates).find(
+    ([key, _]) =>
+      key.startsWith(`@${namespace}`) && key.endsWith(`${templateName}.twig`)
+  )
+  return matchingEntry ? matchingEntry[0] : null
+}
+
+/**
  * Creates a custom loader for SDC components, extending Twing's array loader functionality
  *
  * @param {Object} templates An object where keys are template names and values are template sources
@@ -87,11 +102,12 @@ export function createSDCLoader(templates, namespaces, name = "sdc-array") {
     getCacheKey: (name) => baseLoader.getCacheKey(name),
 
     exists: (name) => {
-      const exists = baseLoader.exists(name)
-      if (!exists) {
-        console.warn(`[SDC Loader] Template not found: ${name}`)
-      }
-      return exists
+      if (baseLoader.exists(name)) return true
+      // Check colon-syntax: "namespace:template" → "@namespace/.../template.twig"
+      const resolved = resolveColonName(name, templates)
+      if (resolved) return true
+      console.warn(`[SDC Loader] Template not found: ${name}`)
+      return false
     },
 
     isFresh: (name, time) => baseLoader.isFresh(name, time),
@@ -118,6 +134,10 @@ export function createSDCLoader(templates, namespaces, name = "sdc-array") {
           return resolved
         }
       }
+
+      // Check colon-syntax: "namespace:template" → "@namespace/.../template.twig"
+      const colonResolved = resolveColonName(name, templates)
+      if (colonResolved) return colonResolved
 
       // If baseLoader has resolve method, use it
       if (typeof baseLoader.resolve === "function") {
