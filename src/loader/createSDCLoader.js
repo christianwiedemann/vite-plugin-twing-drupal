@@ -3,7 +3,11 @@
  * Based on Twing's createArrayLoader with SDC-specific enhancements
  */
 
-import { createSynchronousArrayLoader } from "twing"
+// twing is CJS (index.cjs). Under a pnpm-strict consumer the module is served
+// raw, so a named ESM import yields no binding — default-import the CJS module
+// object and destructure instead.
+import twing from "twing"
+const { createSynchronousArrayLoader } = twing
 
 /**
  * Determines if a template name refers to an SDC component
@@ -47,6 +51,21 @@ const getTemplateByColon = (templateParts, templates) => {
   throw new Error(
     `Template "${templateName}" in namespace "${namespace}" does not exist.`
   )
+}
+
+/**
+ * Resolves a colon-syntax template name (e.g. "my_theme:button") to its
+ * @namespace key in the templates object (e.g. "@my_theme/button/button.twig").
+ * Returns the matching key or null if not found.
+ */
+const resolveColonName = (name, templates) => {
+  if (!name.includes(":")) return null
+  const [namespace, templateName] = name.split(":")
+  const matchingEntry = Object.entries(templates).find(
+    ([key, _]) =>
+      key.startsWith(`@${namespace}`) && key.endsWith(`${templateName}.twig`)
+  )
+  return matchingEntry ? matchingEntry[0] : null
 }
 
 /**
@@ -94,11 +113,12 @@ export function createSDCLoader(templates, namespaces, name = "sdc-array") {
     getCacheKey: (name) => baseLoader.getCacheKey(name),
 
     exists: (name) => {
-      const exists = baseLoader.exists(name)
-      if (!exists) {
-        console.warn(`[SDC Loader] Template not found: ${name}`)
-      }
-      return exists
+      if (baseLoader.exists(name)) return true
+      // Check colon-syntax: "namespace:template" → "@namespace/.../template.twig"
+      const resolved = resolveColonName(name, templates)
+      if (resolved) return true
+      console.warn(`[SDC Loader] Template not found: ${name}`)
+      return false
     },
 
     isFresh: (name, time) => baseLoader.isFresh(name, time),
@@ -125,6 +145,10 @@ export function createSDCLoader(templates, namespaces, name = "sdc-array") {
           return resolved
         }
       }
+
+      // Check colon-syntax: "namespace:template" → "@namespace/.../template.twig"
+      const colonResolved = resolveColonName(name, templates)
+      if (colonResolved) return colonResolved
 
       // If baseLoader has resolve method, use it
       if (typeof baseLoader.resolve === "function") {

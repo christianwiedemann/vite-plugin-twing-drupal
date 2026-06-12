@@ -2,11 +2,23 @@
 import { readdirSync, readFileSync, existsSync } from "fs"
 import { resolve, relative, dirname, join } from "path"
 import { fileURLToPath } from "url"
+import { createRequire } from "module"
 import getComponentReferences from "./loader/getComponentReferences.js"
 
 // Get current file directory.
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+// Resolve the plugin's own runtime dependencies (drupal-attribute, twing, the
+// drupal-twig-extensions) from THIS plugin's node_modules. The generated module
+// below is served from the consumer's component URL, so a bare specifier there
+// would resolve against the consumer root — which fails under pnpm-strict (these
+// are the plugin's transitive deps, not the consumer's). Emitting a path resolved
+// from the plugin makes the compiled twig work regardless of consumer hoisting.
+const pluginRequire = createRequire(import.meta.url)
+function resolveRuntimeDep(specifier) {
+  return pluginRequire.resolve(specifier)
+}
 
 /**
  * Resolve namespace paths, supporting multiple directories per namespace
@@ -375,10 +387,15 @@ function generateModuleContent(
 
   return `
     import DrupalAttribute from 'drupal-attribute';
-    import { createSynchronousEnvironment } from 'twing';
-
+    import __twingRuntime from 'twing';
     import { addDrupalExtensions } from '@christianwiedemann/drupal-twig-extensions/twing';
-    
+    // Bare specifiers above resolve via the plugin's config() alias to the
+    // plugin's own copies (works under pnpm-strict). twing ships a plain CJS
+    // build (no __esModule), so destructure off its default (module.exports);
+    // drupal-twig-extensions is an __esModule build with a real named export,
+    // so import it by name.
+    const { createSynchronousEnvironment } = __twingRuntime;
+
     import createSDCLoader from '/${relative(
       cwd,
       resolve(__dirname, "./loader/createSDCLoader.js")
@@ -600,6 +617,33 @@ export default function precompileTwigPlugin(options = {}) {
   return {
     name: "vite-plugin-precompile-twig",
     enforce: "pre",
+
+    // Alias the plugin's own runtime deps to absolute paths resolved from THIS
+    // plugin's node_modules. The compiled-twig modules below import these by
+    // bare specifier but are served from the consumer's component URL, so under
+    // a pnpm-strict consumer the bare names would resolve against the consumer
+    // root and fail (they are the plugin's transitive deps). Aliasing keeps the
+    // generated/source imports clean while resolving regardless of hoisting.
+    config() {
+      const alias = []
+      for (const dep of [
+        "drupal-attribute",
+        "twing",
+        "@christianwiedemann/drupal-twig-extensions/twing",
+      ]) {
+        try {
+          alias.push({
+            find: new RegExp(
+              "^" + dep.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$"
+            ),
+            replacement: resolveRuntimeDep(dep),
+          })
+        } catch {
+          // dep not reachable from the plugin — leave resolution to Vite defaults
+        }
+      }
+      return alias.length ? { resolve: { alias } } : {}
+    },
 
     resolveId(importee) {
       return include.test(importee) ? importee : null
