@@ -1,7 +1,9 @@
 name: validate
 permissions:
-  id-token: write  # Required for OIDC
-  contents: read
+  id-token: write # Required for OIDC / npm provenance
+  contents: write # auto needs to push the version commit + tag to main
+  issues: write # auto comments on released issues
+  pull-requests: write # auto comments on released PRs
 on:
   push:
     branches:
@@ -20,10 +22,10 @@ jobs:
         uses: styfle/cancel-workflow-action@0.9.0
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
@@ -46,34 +48,30 @@ jobs:
     runs-on: ubuntu-latest
     if:
       ${{ github.repository == 'christianwiedemann/vite-plugin-twing-drupal' &&
-      contains('refs/heads/main',github.ref) && github.event_name == 'push' }}
+      github.ref == 'refs/heads/main' && github.event_name == 'push' }}
     steps:
       - name: 🛑 Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.9.0
 
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # auto needs full history + tags to compute the release
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: 22
+          registry-url: 'https://registry.npmjs.org'
 
       - name: 📥 Download deps
         uses: bahmutov/npm-install@v1
         with:
           useLockFile: false
 
-      - name: 🏗 Run build script
-        run: npm run build
-
-      - name: 🚀 Release
-        uses: cycjimmy/semantic-release-action@v4
-        with:
-          semantic_version: 23
-          branches: |
-            [
-              'main'
-            ]
+      - name: 🚀 Release (auto, PR-label driven)
+        run: npx auto shipit
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -21,7 +21,7 @@
     "update-snapshot": "vitest -u",
     "test:debug": "node --inspect-brk node_modules/.bin/vitest run",
     "pretest": "npm run-script build",
-    "semantic-release": "semantic-release"
+    "release": "auto shipit"
   },
   "repository": {
     "type": "git",
@@ -40,8 +40,8 @@
   },
   "devDependencies": {
     "prettier": "^3.0.3",
-    "semantic-release": "^24.2.7",
     "vite": "^6",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "auto": "^11.3.0"
   }
 }
