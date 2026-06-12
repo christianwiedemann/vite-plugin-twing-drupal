@@ -3,7 +3,11 @@
  * Based on Twing's createArrayLoader with SDC-specific enhancements
  */
 
-import { createSynchronousArrayLoader } from "twing"
+// twing is CJS (index.cjs). Under a pnpm-strict consumer the module is served
+// raw, so a named ESM import yields no binding — default-import the CJS module
+// object and destructure instead.
+import twing from "twing"
+const { createSynchronousArrayLoader } = twing
 
 /**
  * Determines if a template name refers to an SDC component
