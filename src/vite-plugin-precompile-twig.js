@@ -633,7 +633,9 @@ export default function precompileTwigPlugin(options = {}) {
       ]) {
         try {
           alias.push({
-            find: new RegExp("^" + dep.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$"),
+            find: new RegExp(
+              "^" + dep.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$"
+            ),
             replacement: resolveRuntimeDep(dep),
           })
         } catch {
