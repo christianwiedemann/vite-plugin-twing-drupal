@@ -1,0 +1,4 @@
+{
+  "plugins": ["npm", "released"],
+  "baseBranch": "main"
+}
