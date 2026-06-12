@@ -22,10 +22,17 @@ const isSDC = (name) => name.includes("@") || name.includes("/")
 const getTemplateByColon = (templateParts, templates) => {
   const [namespace, templateName] = templateParts
 
-  // Find the first template that matches the namespace and template name pattern
+  // Find the template matching `@namespace/.../<name>.twig`.
+  //
+  // Using only `endsWith(`${templateName}.twig`)` matches any template whose filename ends
+  // with the target name, so e.g. `namespace:button` incorrectly resolves to
+  // `@namespace/atoms/ai-floating-button/ai-floating-button.twig` when that entry appears
+  // first in Object.entries iteration order. Requiring a leading `/` before the filename
+  // avoids the collision while still accommodating folder layouts that do not mirror the
+  // file name.
   const matchingEntry = Object.entries(templates).find(
     ([key, _]) =>
-      key.startsWith(`@${namespace}`) && key.endsWith(`${templateName}.twig`)
+      key.startsWith(`@${namespace}`) && key.endsWith(`/${templateName}.twig`)
   )
 
   if (matchingEntry) {
