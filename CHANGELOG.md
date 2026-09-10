@@ -1,3 +1,13 @@
+# v1.1.4 (Thu Sep 10 2026)
+
+#### 🐛 Bug Fix
+
+- fix: share one Twing environment across compiled templates [#17](https://github.com/christianwiedemann/vite-plugin-twing-drupal/pull/17) ([@christianwiedemann](https://github.com/christianwiedemann))
+
+#### Authors: 1
+
+- Christian Wiedemann ([@christianwiedemann](https://github.com/christianwiedemann))
+
 # v1.1.1 (Fri Jun 12 2026)
 
 #### 🐛 Bug Fix
