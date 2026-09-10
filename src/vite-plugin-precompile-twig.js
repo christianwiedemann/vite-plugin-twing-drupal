@@ -20,6 +20,9 @@ function resolveRuntimeDep(specifier) {
   return pluginRequire.resolve(specifier)
 }
 
+/** Shared Twing environment — one module for the whole template cache. */
+const VIRTUAL_TWING_ENV = "virtual:twing-env"
+
 /**
  * Resolve namespace paths, supporting multiple directories per namespace
  * @param {Object} namespaces - Namespace configuration
@@ -353,26 +356,42 @@ function createTemplateResolver(
 }
 
 /**
- * Generate module content for Twig template
- * @param {string} key - Template key
+ * Build the shared Twing environment module.
+ *
+ * Previously every compiled .twig file inlined the entire template cache
+ * (`JSON.stringify` of every source). With a few hundred SDC templates that
+ * is several megabytes of JS per import, so Storybook/Vite crawls. One
+ * virtual module holds the cache; each template only exports `render(key)`.
+ * Duplicate source strings (namespace + relative keys of the same file) share
+ * a single const so the payload stays close to unique template size.
+ *
  * @param {Object} templateSources - All template sources
  * @param {Object} resolvedNamespaces - Resolved namespace paths
  * @param {string} cwd - Current working directory
+ * @param {string} [hooks] - Optional hooks module path
  * @returns {string} - Generated module content
  */
-function generateModuleContent(
-  key,
+function generateSharedEnvModule(
   templateSources,
   resolvedNamespaces,
   cwd,
   hooks
 ) {
-  const allSourcesString = Object.entries(templateSources)
-    .map(
-      ([templateKey, templateContent]) =>
-        `'${templateKey}': ${JSON.stringify(templateContent)}`
-    )
-    .join(",\n    ")
+  const contentToVar = new Map()
+  const decls = []
+  const assignments = []
+  let n = 0
+  for (const [templateKey, templateContent] of Object.entries(
+    templateSources
+  )) {
+    let varName = contentToVar.get(templateContent)
+    if (!varName) {
+      varName = `t${n++}`
+      contentToVar.set(templateContent, varName)
+      decls.push(`const ${varName} = ${JSON.stringify(templateContent)};`)
+    }
+    assignments.push(`'${templateKey}': ${varName}`)
+  }
 
   const twingNamespacesString = Object.keys(resolvedNamespaces)
     .map(
@@ -400,22 +419,21 @@ function generateModuleContent(
       cwd,
       resolve(__dirname, "./loader/createSDCLoader.js")
     )}';
-    
-    // Include all templates, including namespaced ones.
+
+    ${decls.join("\n    ")}
     const allSources = {
-      ${allSourcesString}
+      ${assignments.join(",\n      ")}
     };
 
     const twingNamespaces = {
       ${twingNamespacesString}
     };
-    
-    // Create a loader and environment.
+
     const loader = createSDCLoader(allSources, twingNamespaces);
     const env = createSynchronousEnvironment(loader);
     addDrupalExtensions(env);
     ${hooksString}
-    
+
     class PrintableArrayWrapper {
       constructor(array) {
         this.items = array;
@@ -423,7 +441,7 @@ function generateModuleContent(
       [Symbol.iterator]() {
         let index = 0;
         const items = this.items;
-    
+
         return {
           next() {
             if (index < items.length) {
@@ -438,7 +456,20 @@ function generateModuleContent(
         return this.items.join("\\n");
       }
     }
-    
+
+    export { env, DrupalAttribute, PrintableArrayWrapper };
+  `
+}
+
+/**
+ * Generate module content for Twig template
+ * @param {string} key - Template key
+ * @returns {string} - Generated module content
+ */
+function generateModuleContent(key) {
+  return `
+    import { env, DrupalAttribute, PrintableArrayWrapper } from '${VIRTUAL_TWING_ENV}';
+
     /**
      * Renders the preloaded Twig template.
      * @param {Object} context - the Twig context
@@ -646,14 +677,21 @@ export default function precompileTwigPlugin(options = {}) {
     },
 
     resolveId(importee) {
+      if (importee === VIRTUAL_TWING_ENV) return importee
       return include.test(importee) ? importee : null
     },
 
     load(id) {
+      if (id === VIRTUAL_TWING_ENV) {
+        return generateSharedEnvModule(
+          templateSources,
+          resolvedNamespaces,
+          cwd,
+          hooks
+        )
+      }
       const clean = id.split("?")[0].replace(/^\.\//, "")
       if (!include.test(clean)) return null
-      console.log("ID: " + id)
-      console.log(`[Twig] Resolving template: ${clean}`)
       const resolved = resolveTemplate(clean)
 
       if (!resolved) {
@@ -674,13 +712,7 @@ export default function precompileTwigPlugin(options = {}) {
       }
       templateToModuleMap.get(key).add(id)
 
-      return generateModuleContent(
-        key,
-        templateSources,
-        resolvedNamespaces,
-        cwd,
-        hooks
-      )
+      return generateModuleContent(key)
     },
 
     handleHotUpdate({ file, server }) {
@@ -706,7 +738,10 @@ export default function precompileTwigPlugin(options = {}) {
           templateKeys
         )
 
-        console.log(`[HMR] Found ${affectedModules.length} affected modules`)
+        const sharedModule = server.moduleGraph.getModuleById(VIRTUAL_TWING_ENV)
+        if (sharedModule && !affectedModules.includes(sharedModule)) {
+          affectedModules.push(sharedModule)
+        }
 
         return affectedModules
       } catch (error) {
